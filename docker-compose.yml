@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  camunda:
+    image: camunda/zeebe:8.4.1
+    ports:
+      - "26500:26500"
+      - "8080:8080"
+
+  ollama:
+    image: ollama/ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama-data:/root/.ollama
+
+  web:
+    build: ./web
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./web:/app
+
+volumes:
+  ollama-data:
