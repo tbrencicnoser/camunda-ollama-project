@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:zeebe="http://camunda.org/schema/zeebe/1.0" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_1lj2leg" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.32.0" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.6.0">
+  <bpmn:process id="Process_05zs46z" isExecutable="true">
+    <bpmn:serviceTask id="Activity_1iqengo" name="E-Mail senden">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="email" />
+        <zeebe:ioMapping>
+          <zeebe:input target="ollamaResponse" />
+          <zeebe:input target="weatherInfo" />
+          <zeebe:input target="holidayInfo" />
+          <zeebe:output target="emailStatus " />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_11su1ul</bpmn:incoming>
+      <bpmn:outgoing>Flow_1qi5sbh</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:endEvent id="Event_0qwa4il">
+      <bpmn:incoming>Flow_1qi5sbh</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:serviceTask id="Activity_0ckdu7p" name="Feiertage Prüfen">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="holidays" />
+        <zeebe:ioMapping>
+          <zeebe:input target="ollamaResponse " />
+          <zeebe:output target="holidayInfo " />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1cl4rdh</bpmn:incoming>
+      <bpmn:outgoing>Flow_11su1ul</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_0qikjke" sourceRef="StartEvent_1" targetRef="Activity_0ua66n0" />
+    <bpmn:sequenceFlow id="Flow_11su1ul" sourceRef="Activity_0ckdu7p" targetRef="Activity_1iqengo" />
+    <bpmn:sequenceFlow id="Flow_1cl4rdh" sourceRef="Activity_0nxv86w" targetRef="Activity_0ckdu7p" />
+    <bpmn:sequenceFlow id="Flow_1k3pky0" sourceRef="Activity_1jj3y70" targetRef="Activity_0nxv86w" />
+    <bpmn:sequenceFlow id="Flow_1qi5sbh" sourceRef="Activity_1iqengo" targetRef="Event_0qwa4il" />
+    <bpmn:sequenceFlow id="Flow_1xdb5dr" sourceRef="Activity_0ua66n0" targetRef="Activity_1jj3y70" />
+    <bpmn:serviceTask id="Activity_1jj3y70" name="Ollama aufruden">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="ollama" retries="3" />
+        <zeebe:ioMapping>
+          <zeebe:input target="pdfText " />
+          <zeebe:output target="ollamaResponse " />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1xdb5dr</bpmn:incoming>
+      <bpmn:outgoing>Flow_1k3pky0</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:startEvent id="StartEvent_1">
+      <bpmn:outgoing>Flow_0qikjke</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:userTask id="Activity_0ua66n0" name="Upload PDF">
+      <bpmn:extensionElements>
+        <zeebe:userTask />
+        <zeebe:formDefinition externalReference="embedded:app:forms/upload-pdf.html" />
+        <zeebe:ioMapping>
+          <zeebe:output target="pdfText " />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0qikjke</bpmn:incoming>
+      <bpmn:outgoing>Flow_1xdb5dr</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:serviceTask id="Activity_0nxv86w" name="Wetter prüfen">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="weather" />
+        <zeebe:ioMapping>
+          <zeebe:input target="ollamaResponse " />
+          <zeebe:output target="weatherInfo " />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1k3pky0</bpmn:incoming>
+      <bpmn:outgoing>Flow_1cl4rdh</bpmn:outgoing>
+    </bpmn:serviceTask>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_05zs46z">
+      <bpmndi:BPMNShape id="StartEvent_1_di" bpmnElement="StartEvent_1">
+        <dc:Bounds x="182" y="102" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0keyusr_di" bpmnElement="Activity_0ua66n0">
+        <dc:Bounds x="270" y="80" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_16npzdi_di" bpmnElement="Activity_1jj3y70">
+        <dc:Bounds x="430" y="80" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0aiqeg0_di" bpmnElement="Activity_0nxv86w">
+        <dc:Bounds x="590" y="80" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1cyfjt1_di" bpmnElement="Activity_0ckdu7p">
+        <dc:Bounds x="750" y="80" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_19f10qp_di" bpmnElement="Activity_1iqengo">
+        <dc:Bounds x="910" y="80" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0qwa4il_di" bpmnElement="Event_0qwa4il">
+        <dc:Bounds x="1072" y="102" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_0qikjke_di" bpmnElement="Flow_0qikjke">
+        <di:waypoint x="218" y="120" />
+        <di:waypoint x="270" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1xdb5dr_di" bpmnElement="Flow_1xdb5dr">
+        <di:waypoint x="370" y="120" />
+        <di:waypoint x="430" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1k3pky0_di" bpmnElement="Flow_1k3pky0">
+        <di:waypoint x="530" y="120" />
+        <di:waypoint x="590" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1cl4rdh_di" bpmnElement="Flow_1cl4rdh">
+        <di:waypoint x="690" y="120" />
+        <di:waypoint x="750" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_11su1ul_di" bpmnElement="Flow_11su1ul">
+        <di:waypoint x="850" y="120" />
+        <di:waypoint x="910" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1qi5sbh_di" bpmnElement="Flow_1qi5sbh">
+        <di:waypoint x="1010" y="120" />
+        <di:waypoint x="1072" y="120" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

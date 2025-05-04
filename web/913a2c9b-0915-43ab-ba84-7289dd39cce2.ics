@@ -1,0 +1,25 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:ics.py - http://git.io/lLljaA
+BEGIN:VEVENT
+DESCRIPTION:Review completed deliverables and discuss any feedback with the client.
+DTEND:20250512T103000Z
+DTSTART:20250512T090000Z
+SUMMARY:Client Call Review deliverables
+UID:17e5d660-b78b-4608-b916-95a99b2411f7@17e5.org
+END:VEVENT
+BEGIN:VEVENT
+DESCRIPTION:Discuss project progress and upcoming tasks.
+DTEND:20250510T120000Z
+DTSTART:20250510T100000Z
+SUMMARY:Meeting with Team Discuss project status
+UID:cbc071f7-368f-4d76-9473-5fb5c2b32342@cbc0.org
+END:VEVENT
+BEGIN:VEVENT
+DESCRIPTION:Plan and prioritize tasks for the upcoming sprint.
+DTEND:20250511T160000Z
+DTSTART:20250511T140000Z
+SUMMARY:Workshop Planning next sprint
+UID:5eb05ae2-2cb2-4541-b755-29f22efb419b@5eb0.org
+END:VEVENT
+END:VCALENDAR
